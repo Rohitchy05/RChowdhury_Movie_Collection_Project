@@ -164,17 +164,45 @@ public class MovieCollection
 
     private void searchCast()
     {
-
-    }
-
-    private void searchKeywords()
-    {
-        System.out.println("Enter a keyword to search.");
+        System.out.println("Enter an actor's name: ");
         String searchTerm = scanner.nextLine().toLowerCase();
-        ArrayList<Movie> results = new ArrayList<Movie>();
+        ArrayList<String> results = new ArrayList<String>();
         for (Movie m : movies) {
-            String movieTitle = m.getTitle().toLowerCase();
-            if (movieTitle.indexOf(searchTerm) != -1) {
+            String movieCast = m.getCast().toLowerCase();
+            for (String actor : m.getCast().split("\\|")) {
+                if (actor.contains(searchTerm) && !results.contains(actor)) {
+                    results.add(actor);
+                }
+            }
+        }
+        for (int j = 1; j < results.size(); j++)
+        {
+            String temp = results.get(j);
+
+            int possibleIndex = j;
+            while (possibleIndex > 0 && temp.compareTo(results.get(possibleIndex - 1)) < 0)
+            {
+                results.set(possibleIndex, results.get(possibleIndex - 1));
+                possibleIndex--;
+            }
+            results.set(possibleIndex, temp);
+        }
+        for (int i = 0; i < results.size(); i++) {
+            String actor = results.get(i);
+            int choiceNum = i + 1;
+            System.out.println("" + choiceNum + ". " + actor);
+        }
+        System.out.println("Which actor's movies would you like to see?");
+        System.out.print("Enter number: ");
+
+        int choice = scanner.nextInt();
+        scanner.nextLine();
+
+        String selectedActor = results.get(choice - 1);
+        ArrayList<Movie> movies1 = new ArrayList<Movie>();
+        for (Movie m : movies) {
+            String movieCast = m.getCast();
+            if (movies.indexOf(searchTerm) != -1) {
                 results.add(m);
             }
         }
@@ -184,6 +212,50 @@ public class MovieCollection
             int choiceNum = i + 1;
             System.out.println("" + choiceNum + ". " + keyWords);
         }
+        System.out.println("Which movie would you like to learn more about?");
+        System.out.print("Enter number: ");
+
+        int choice = scanner.nextInt();
+        scanner.nextLine();
+
+        Movie selectedMovie = results.get(choice - 1);
+
+        displayMovieInfo(selectedMovie);
+
+        System.out.println("\n ** Press Enter to Return to Main Menu **");
+        scanner.nextLine();
+
+    }
+
+    private void searchKeywords()
+    {
+        System.out.println("Enter a keyword to search.");
+        String searchTerm = scanner.nextLine().toLowerCase();
+        ArrayList<Movie> results = new ArrayList<Movie>();
+        for (Movie m : movies) {
+            String keyWords = m.getKeywords().toLowerCase();
+            if (keyWords.indexOf(searchTerm) != -1) {
+                results.add(m);
+            }
+        }
+        sortResults(results);
+        for (int i = 0; i < results.size(); i++) {
+            String keyWords = results.get(i).getTitle();
+            int choiceNum = i + 1;
+            System.out.println("" + choiceNum + ". " + keyWords);
+        }
+        System.out.println("Which movie would you like to learn more about?");
+        System.out.print("Enter number: ");
+
+        int choice = scanner.nextInt();
+        scanner.nextLine();
+
+        Movie selectedMovie = results.get(choice - 1);
+
+        displayMovieInfo(selectedMovie);
+
+        System.out.println("\n ** Press Enter to Return to Main Menu **");
+        scanner.nextLine();
     }
 
     private void listGenres()
