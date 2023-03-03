@@ -195,36 +195,36 @@ public class MovieCollection
     private void searchCast()
     {
         System.out.print("Enter a cast search term: ");
-        String castFind = scanner.nextLine();
-        castFind = castFind.substring(0, 1).toUpperCase() + castFind.substring(1);
+        String searchTerm = scanner.nextLine();
+        searchTerm = searchTerm.substring(0, 1).toUpperCase() + searchTerm.substring(1);
         //capialize Bob nugget -> Bob Nugget
-        ArrayList<String> castList = new ArrayList<String>();
+        ArrayList<String> actorList = new ArrayList<String>();
         for(int i = 0; i<movies.size();i++){ //for every movie
             String cast = movies.get(i).getCast(); //obtains the cast of movie i//
             while(cast.indexOf("|")!=-1){ //while there still are cast members to be looked thru//
                 String a = cast.substring(0,cast.indexOf("|"));
-                if(a.contains(castFind)){
-                    if(!castList.contains(a)){
-                        castList.add(a);
+                if(a.contains(searchTerm)){
+                    if(!actorList.contains(a)){
+                        actorList.add(a);
                     }
                 }
                 cast = cast.substring(cast.indexOf("|")+1);
             }
-            if(!castList.contains(cast)&&cast.contains(castFind)){
-                castList.add(cast);
+            if(!actorList.contains(cast)&&cast.contains(searchTerm)){
+                actorList.add(cast);
             }
         }
         //below works//
-        Collections.sort(castList);
-        for(int q = 0; q < castList.size(); q++){
+        Collections.sort(actorList);
+        for(int q = 0; q < actorList.size(); q++){
             int choiceNum = q+1;
-            System.out.println("" + choiceNum + ". " + castList.get(q));
+            System.out.println("" + choiceNum + ". " + actorList.get(q));
         }
         System.out.println("Select a cast member to see their movies");
         System.out.print("Enter number: ");
         int choices = scanner.nextInt();
         scanner.nextLine();
-        String person = castList.get(choices-1);
+        String person = actorList.get(choices-1);
         ArrayList<Movie> results = new ArrayList<Movie>();
         for(int i = 0; i<movies.size();i++){
             if (movies.get(i).getCast().contains(person)){
@@ -251,8 +251,8 @@ public class MovieCollection
     private void searchKeywords()
     {
         System.out.print("Enter a keyword search term: ");
-        String keyword = scanner.nextLine();
-        keyword = keyword.toLowerCase();
+        String searchTerm = scanner.nextLine();
+        searchTerm = searchTerm.toLowerCase();
         ArrayList<Movie> results = new ArrayList<Movie>();
         for(int i = 0; i < movies.size(); i++){
             String movieKeywords = movies.get(i).getKeywords();
@@ -262,7 +262,7 @@ public class MovieCollection
                 movieKeywords = movieKeywords.substring(movieKeywords.indexOf("|")+1);
             }
             movieKeywordsList.add(movieKeywords);
-            if(movieKeywordsList.contains(keyword)){
+            if(movieKeywordsList.contains(searchTerm)){
                 results.add(movies.get(i));
             }
         }
@@ -335,24 +335,24 @@ public class MovieCollection
     {
         //plan: for every movie, if its the highest rating, add it to gah and then remove it from movies list. do it again and again until gah has 50 items.//
         //another method is by sorting the movies list by user rating and then removing all items until there are 50 left//
-        ArrayList<Movie> gah = new ArrayList<Movie>();
+        ArrayList<Movie> topRatedMovies = new ArrayList<Movie>();
         sortResults2(movies);
-        gah = movies;
-        for(int i = gah.size()-1;i>49;i--){
-            gah.remove(i);
+        topRatedMovies = movies;
+        for(int i = topRatedMovies.size()-1;i>49;i--){
+            topRatedMovies.remove(i);
         }
 
 
-        for (int i = 0; i < gah.size(); i++){
-            String title = gah.get(i).getTitle();
+        for (int i = 0; i < topRatedMovies.size(); i++){
+            String title = topRatedMovies.get(i).getTitle();
             int choiceNum = i + 1;
-            System.out.println("" + choiceNum + ". " + title + " " + gah.get(choiceNum-1).getUserRating());
+            System.out.println("" + choiceNum + ". " + title + " " + topRatedMovies.get(choiceNum-1).getUserRating());
         }
         System.out.println("Which movie would you like to learn more about?");
         System.out.print("Enter number: ");
         int choice = scanner.nextInt();
         scanner.nextLine();
-        Movie selectedMovie = gah.get(choice - 1);
+        Movie selectedMovie = topRatedMovies.get(choice - 1);
         displayMovieInfo(selectedMovie);
         System.out.println("\n ** Press Enter to Return to Main Menu **");
         scanner.nextLine();
@@ -360,24 +360,24 @@ public class MovieCollection
     }
     private void listHighestRevenue()
     {
-        ArrayList<Movie> gah = new ArrayList<Movie>();
+        ArrayList<Movie> topEarningMovies = new ArrayList<Movie>();
         sortResults3(movies);
-        gah = movies;
-        for(int i = gah.size()-1;i>49;i--){
-            gah.remove(i);
+        topEarningMovies = movies;
+        for(int i = topEarningMovies.size()-1;i>49;i--){
+            topEarningMovies.remove(i);
         }
 
 
-        for (int i = 0; i < gah.size(); i++){
-            String title = gah.get(i).getTitle();
+        for (int i = 0; i < topEarningMovies.size(); i++){
+            String title = topEarningMovies.get(i).getTitle();
             int choiceNum = i + 1;
-            System.out.println("" + choiceNum + ". " + title + " " + gah.get(choiceNum-1).getRevenue());
+            System.out.println("" + choiceNum + ". " + title + " " + topEarningMovies.get(choiceNum-1).getRevenue());
         }
         System.out.println("Which movie would you like to learn more about?");
         System.out.print("Enter number: ");
         int choice = scanner.nextInt();
         scanner.nextLine();
-        Movie selectedMovie = gah.get(choice - 1);
+        Movie selectedMovie = topEarningMovies.get(choice - 1);
         displayMovieInfo(selectedMovie);
         System.out.println("\n ** Press Enter to Return to Main Menu **");
         scanner.nextLine();
